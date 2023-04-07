@@ -8,34 +8,30 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class PokeAdapter (private val pokeList: List<String>) : RecyclerView.Adapter<PokeAdapter.ViewHolder>() {
+data class Pokemon(val id: String, val name: String, val imageUrl: String)
+
+class PokeAdapter(private val pokeList: List<Pokemon>) : RecyclerView.Adapter<PokeAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val pokeImage: ImageView
-        val pokeName: TextView
-
-        init {
-            // Find our RecyclerView item's ImageView for future use
-            pokeImage = view.findViewById(R.id.poke_image)
-            pokeName = itemView.findViewById(R.id.poke_name)
-
-        }
+        val pokeImage: ImageView = view.findViewById(R.id.poke_image)
+        val pokeName: TextView = view.findViewById(R.id.poke_name)
+        val pokeId: TextView = view.findViewById(R.id.poke_id)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.poke_item, parent, false)
-
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val pokemon = pokeList[position]
         Glide.with(holder.itemView)
-            .load(pokeList[position])
+            .load(pokemon.imageUrl)
             .centerCrop()
             .into(holder.pokeImage)
-
+        holder.pokeName.text = pokemon.name
+        holder.pokeId.text = "ID: ${pokemon.id}"
     }
 
     override fun getItemCount() = pokeList.size

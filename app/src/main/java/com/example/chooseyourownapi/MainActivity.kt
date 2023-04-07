@@ -4,9 +4,15 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
@@ -17,30 +23,24 @@ class MainActivity : AppCompatActivity() {
     var pokeImageURL = ""
     var pokeName = ""
     var pokeId = ""
+    //private var counter = 0
+    private lateinit var pokeList: MutableList<String>
+    private lateinit var rvPoke: RecyclerView
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getPokeImageURL()
+        //getPokeImageURL()
         Log.d("pokeImageURL", "poke image URL set")
-        val button = findViewById<Button>(R.id.pokeButton)
-        val imageView = findViewById<ImageView>(R.id.pokeImage)
-        val textView = findViewById<TextView>(R.id.pokeNameText)
-        val textView2 = findViewById<TextView>(R.id.pokeid)
-        getNextImage(button,imageView,textView,textView2)
-    }
-    private fun getNextImage(button: Button, imageView: ImageView,textView:TextView,textView2:TextView) {
-        button.setOnClickListener {
+        rvPoke = findViewById(R.id.poke_list)
+        pokeList = mutableListOf()
+
+        for (i in 0 until 20) {
             getPokeImageURL()
-
-            Glide.with(this)
-                . load(pokeImageURL)
-                .fitCenter()
-                .into(imageView)
-                textView.text =pokeName
-                textView2.text=pokeId
         }
-
+        val adapter = PokeAdapter(pokeList)
+        rvPoke.adapter = adapter
+        rvPoke.layoutManager = LinearLayoutManager(this)
     }
 
     private fun getPokeImageURL(){
@@ -51,8 +51,15 @@ class MainActivity : AppCompatActivity() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
                 Log.d("Poke", "response successful$json")
                 pokeImageURL = json.jsonObject.getJSONObject("sprites").getString("front_default")
-                pokeName =json.jsonObject.getString("name")
-                pokeId=json.jsonObject.getString("id")
+                pokeName = json.jsonObject.getString("name")
+                pokeId = json.jsonObject.getInt("id").toString()
+//                pokeList.add("$pokeName - #$pokeId")
+                pokeList.add(pokeImageURL)
+                val adapter = PokeAdapter(pokeList)
+                rvPoke.adapter = adapter
+                rvPoke.layoutManager = LinearLayoutManager(this@MainActivity)
+
+
             }
 
             override fun onFailure(
@@ -65,5 +72,9 @@ class MainActivity : AppCompatActivity() {
             }
         }]
     }
+
+
+
+
 
 }

@@ -30,8 +30,8 @@ class PokeAdapter(private val pokeList: List<Pokemon>) : RecyclerView.Adapter<Po
             .load(pokemon.imageUrl)
             .centerCrop()
             .into(holder.pokeImage)
-        holder.pokeName.text = pokemon.name
-        holder.pokeId.text = "ID: ${pokemon.id}"
+        holder.pokeName.text = "ID:${pokemon.name}"
+        holder.pokeId.text = "Name: ${pokemon.id}"
     }
 
     override fun getItemCount() = pokeList.size

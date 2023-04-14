@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         rvPoke = findViewById(R.id.poke_list)
         pokeList = mutableListOf()
 
-        for (i in 0 until 20) {
+        for (i in 0 until 40) {
             getPokemonData()
         }
 

@@ -43,7 +43,7 @@
         android:fontFamily="@font/comic_neue_light"
         android:padding="8dp"
         android:text="name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textAppearance="@style/MyTextStyle"
         android:textColor="#0E0E0E"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
